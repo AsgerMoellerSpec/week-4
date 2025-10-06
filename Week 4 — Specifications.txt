@@ -1,0 +1,32 @@
+Week 4 — Specifications
+
+Requirements: 
+Program must read from Excel-file (.xlsx) (old file, 2006-2016, is example, new file, 2017-2020, is to be read) and get data from specific columns.
+Try download from URL in column "AL". If this fails, download from URL in column "AM". 
+Provide feedback to user if download succeeded or failed. Write to file. 
+Downloaded file to be named according to column "BRNummer". 
+Limit to ten downloads while at Specialisterne. 
+Error handling is important.
+
+Structure: 
+FileHandler class. 
+	Read .xlsx file — using ClosedXML. 
+	Write to text file. 
+DownloadManager class. 
+	Download file by URL. 
+	Main URL and fallback URL(s). 
+README.
+	Required package to read excel files only functions on Windows.
+UML diagram.
+	¯\_(ツ)_/¯
+
+Presentation: 
+- What is the assignment. 
+- My approach; no way I'm making UI. 
+  - Re-use file handler from last week's assignment. Problems with converting to reading .xlsx file type. OleDb. 
+- Structure. Error handling. 
+- Package used. ClosedXML because the alternative requires a license for commercial use (which the course is not, but the assignment alleges to be). 
+
+
+Where to pick up wednesday: 
+Make new DownloadManager class!
