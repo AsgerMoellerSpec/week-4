@@ -166,7 +166,6 @@ namespace Week_4_PDF_downloader {   //  Version 2.0
             //  Iterate over rows
             int i = 1;
             foreach (IXLRow excelRow in worksheet.Rows()) {
-                dataRow = dataTable.NewRow();
 
                 //  Iterate over columns
                 foreach (IXLColumn excelColumn in worksheet.Columns()) {
@@ -178,6 +177,7 @@ namespace Week_4_PDF_downloader {   //  Version 2.0
                         dataTable.Columns.Add(dataColumn);
                     }
 
+                    dataRow = dataTable.NewRow();
                     dataRow[excelColumn.Cell(1).GetString()] = excelColumn.Cell(i).GetString();
                 }
             }
