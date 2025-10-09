@@ -1,15 +1,46 @@
-﻿namespace Week_4_PDF_downloader
+﻿using System.Data;
+
+namespace Week_4_PDF_downloader
 {
     internal class Program
     {
-        static void Main(string[] args)
-        {
-            FileHandler fileHandler = new FileHandler();
-            Console.WriteLine(fileHandler.discoveredFilesCount());
-            fileHandler.readTableFromExcelFileWithHeaders(0);
-            Console.WriteLine("DEBUG — IT FUCKING WORKS, BITCH!");
-            Console.Write(fileHandler.getTable().Rows[1][38] + " ");
-            Console.WriteLine(fileHandler.getTable().Rows[1][39]);
+        static async Task Main(string[] args) {
+            Console.WriteLine("PDF Download Application");
+            Console.WriteLine("Status: Reading Excel file");
+
+            //  Read excel file
+            FileHandler excelFileHandler = new FileHandler("../../../../Excel files");
+            excelFileHandler.readTableFromExcelFileWithHeaders(0);
+
+
+            Console.WriteLine("Status: Excel file finished reading");
+            Console.WriteLine("Status: Attempting download");
+
+            DownloadManager downloadManager = new DownloadManager();
+
+            //  Download files
+            int i = 0;
+            foreach (DataRow tableRow in excelFileHandler.getTable().Rows) {
+                Console.WriteLine("Download status:");
+                Console.WriteLine("".PadRight(8) + tableRow[0]);
+
+                HttpResponseMessage httpResponseMessage = await downloadManager.tryDownloadAsync(tableRow, 0, 37, 38);
+
+                Console.WriteLine("".PadRight(8) + (httpResponseMessage != null ? httpResponseMessage.StatusCode : "NULL"));
+
+                if (i >= 15) {   //  Limit to TEN (10) during on-site test
+                    break;
+                }
+                i++;
+            }
+
+
+            Console.WriteLine("Status: Writing log");
+
+            FileHandler logFileHandler = new FileHandler("../../../../Logs");
+            logFileHandler.writeToCsvFileWithHeaders(downloadManager.getStatusList(), new List<int> { 0, 1 }, ';');
+
+            Console.WriteLine("Status: Log written");
         }
     }
 }

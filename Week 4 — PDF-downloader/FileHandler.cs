@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Text.RegularExpressions;
 using ClosedXML.Excel;
 
 namespace Week_4_PDF_downloader {   //  Version 2.0
@@ -24,8 +25,8 @@ namespace Week_4_PDF_downloader {   //  Version 2.0
         /// </summary>
         /// <param name="pathToFolder">File path literal. Can be relative or absolute.</param>
         public FileHandler(String pathToFolder) {
-            folderLocation = pathToFolder;
-            discoverFiles(pathToFolder);
+            folderLocation = pathToFolder.Trim();
+            discoverFiles();
         }
 
         /// <summary>
@@ -40,10 +41,14 @@ namespace Week_4_PDF_downloader {   //  Version 2.0
         /// Discover files and populate 'files' field with paths to files.
         /// </summary>
         /// <param name="pathToFolder">File path literal. Can be relative or absolute.</param>
-        public void discoverFiles(String pathToFolder) {
-            files = Directory.GetFiles(pathToFolder);
+        public void discoverFiles() {
+            files = Directory.GetFiles(folderLocation);
         }
 
+        /// <summary>
+        /// Get number of files found in folder which this instance of the class points to.
+        /// </summary>
+        /// <returns>Number of files.</returns>
         public int discoveredFilesCount() {
             return files.Length;
         }
@@ -60,7 +65,7 @@ namespace Week_4_PDF_downloader {   //  Version 2.0
             DataColumn dataColumn;
             DataRow dataRow;
 
-            StreamReader streamReader = new StreamReader(files[0]);
+            StreamReader streamReader = new StreamReader(files[discoveredFileIndex]);
 
             String line = streamReader.ReadLine();
             String[] row = null;
@@ -87,9 +92,7 @@ namespace Week_4_PDF_downloader {   //  Version 2.0
                     dataRow = dataTable.NewRow();
                     int j = 0;
                     foreach (DataColumn iteratedColumn in dataTable.Columns) {
-                        Console.WriteLine("\nDEBUG - row " + i);
                         dataRow.SetField(iteratedColumn, row[j]);                   //  <-- possible error here
-                        Console.Write(row[j].PadLeft(10));
 
                         j++;
                     }
@@ -102,6 +105,55 @@ namespace Week_4_PDF_downloader {   //  Version 2.0
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataTable"></param>
+        /// <param name="indicesOfColumnsToWrite"></param>
+        /// <param name="separatorCharacter"></param>
+        public void writeToCsvFileWithHeaders(DataTable dataTable, List<int> indicesOfColumnsToWrite, char separatorCharacter) {
+            indicesOfColumnsToWrite.Order();
+            String fileName = Regex.Replace(DateTime.Now.ToLocalTime().ToString(), "[:]", "-") + ".txt";   //  Name file current time. Replace colons with hyphen.
+            StreamWriter streamWriter = new StreamWriter(folderLocation + '/' + fileName);
+
+            String line = "";
+
+            //  Write headers
+            int i = 0;
+            foreach (int columnIndex in indicesOfColumnsToWrite) {
+                line += dataTable.Columns[columnIndex].ColumnName;
+
+                if (i < indicesOfColumnsToWrite.Count - 1) {
+                    line += separatorCharacter;
+                }
+                i++;
+            }
+
+            streamWriter.WriteLine(line);
+
+            //  Write content
+            foreach (DataRow row in dataTable.Rows) {
+                line = "";
+
+                //  Determine which columns to write
+                int j = 0;
+                foreach (DataColumn dataColumn in dataTable.Columns) {
+                    if (indicesOfColumnsToWrite.Contains(dataTable.Columns.IndexOf(dataColumn))) {
+                        line += row[j];
+
+                        if (j < indicesOfColumnsToWrite.Count - 1) {
+                            line += separatorCharacter;
+                        }
+                    }
+                    j++;
+                }
+
+                streamWriter.WriteLine(line);
+            }
+
+            streamWriter.Close();
+        }
+
+        /// <summary>
         /// Read a given excel file (.XLSX file type). 
         /// Assumes first line is header; all other lines are content in table.
         /// </summary>
@@ -109,7 +161,7 @@ namespace Week_4_PDF_downloader {   //  Version 2.0
         public void readTableFromExcelFileWithHeaders(int discoveredFileIndex) {
             dataTable = new DataTable();
             DataColumn dataColumn;
-            DataRow dataRow;
+            DataRow dataRow = null;
 
             //  Use ClosedXML to read data.
             XLWorkbook workbook = new XLWorkbook(files[discoveredFileIndex]);
@@ -134,14 +186,19 @@ namespace Week_4_PDF_downloader {   //  Version 2.0
                         } catch (DuplicateNameException dupeException) {
                             tryFixDuplicateName(dataColumn);
                         }
-                    } else {    //  If not first row, add data to DataTable
+                    } else {    //  If not first row and not for every column, add new row to DataTable
+                        if (j == 1) {
+                            dataRow = dataTable.NewRow();
+                        }
                         //  Subtract 1 because code runs "index starts at zero" while Excel runs "index starts at one".
-                        dataRow = dataTable.NewRow();
-                        dataRow[dataTable.Columns[j-1].ColumnName] = excelColumn.Cell(i).GetString();
-                        dataTable.Rows.Add(dataRow);
+                        dataRow[dataTable.Columns[j - 1].ColumnName] = excelColumn.Cell(i).GetString();
                     }
 
                     j++;
+                }
+
+                if (i != 1) {
+                    dataTable.Rows.Add(dataRow);
                 }
 
                 j = 1;
@@ -166,6 +223,7 @@ namespace Week_4_PDF_downloader {   //  Version 2.0
             //  Iterate over rows
             int i = 1;
             foreach (IXLRow excelRow in worksheet.Rows()) {
+                dataRow = dataTable.NewRow();
 
                 //  Iterate over columns
                 foreach (IXLColumn excelColumn in worksheet.Columns()) {
@@ -177,9 +235,10 @@ namespace Week_4_PDF_downloader {   //  Version 2.0
                         dataTable.Columns.Add(dataColumn);
                     }
 
-                    dataRow = dataTable.NewRow();
                     dataRow[excelColumn.Cell(1).GetString()] = excelColumn.Cell(i).GetString();
                 }
+
+                dataTable.Rows.Add(dataRow);
             }
         }
 
