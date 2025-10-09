@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Net.Http.Headers;
 
 namespace Week_4_PDF_downloader {
     internal class DownloadManager {
@@ -14,9 +13,16 @@ namespace Week_4_PDF_downloader {
         //  Properties
         public List<String> allowedTypes = new List<String> { "application/pdf" };
 
+        /// <summary>
+        /// Create a new object instance targeting default folder, to which downloaded files will be saved.
+        /// </summary>
         public DownloadManager() : this(DEFAULT_DOWNLOAD_LOCATION) {
         }
 
+        /// <summary>
+        /// Create a new object instance targeting a set folder, to which downloaded files will be saved.
+        /// </summary>
+        /// <param name="downloadLocation">Folder location and name. Can be relative or absolute.</param>
         public DownloadManager(String downloadLocation) {
             this.downloadLocation = downloadLocation.Trim();
 
@@ -35,34 +41,57 @@ namespace Week_4_PDF_downloader {
             statusTable.Columns.Add(dataColumn);
         }
 
+        /// <summary>
+        /// Get result of downloads made with this object instance.
+        /// </summary>
+        /// <returns>DataTable object of status. Each row represents a download which was either successful or unsuccessful.</returns>
         public DataTable getStatusList() {
             return statusTable;
         }
 
         /// <summary>
-        /// 
+        /// Downloads, or tries to download, a file from URL.
         /// </summary>
-        /// <param name="tableRow"></param>
-        /// <param name="fileNameIndex"></param>
-        /// <param name="urlIndex"></param>
-        /// <param name="fallbackUrlIndex"></param>
-        /// <returns></returns>
+        /// <param name="tableRow">DataRow object containing URL, fallback-URL and name for file to be saved as.</param>
+        /// <param name="fileNameIndex">Index of column from DataRow in which the file name is located.</param>
+        /// <param name="urlIndex">Index of column from DataRow in which the URL is located.</param>
+        /// <param name="fallbackUrlIndex">Index of column from DataRow in which the fallback-URL is located.</param>
+        /// <returns>HttpResponseMessage Task with information of latest attempted download; from first URL source 
+        /// if this was successful; from second URL source if first was unsuccessful, regardless of whether 
+        /// the download from the second source was successful or not. 
+        /// Not required to be handled.</returns>
         public async Task<HttpResponseMessage> tryDownloadAsync(DataRow tableRow, int fileNameIndex, int urlIndex, int fallbackUrlIndex) {
             HttpResponseMessage httpResponseMessage = null;
             Boolean isSuccess = false;
             int contentTypeIndexInAllowedTypes = -1;
 
+            //  Regardless of error type, assume failure and continue
             try {   //  Try download file
                 httpResponseMessage = await httpClient.GetAsync(tableRow[urlIndex].ToString());
                 contentTypeIndexInAllowedTypes = allowedTypes.IndexOf(httpResponseMessage.Content.Headers.ContentType.ToString());
                 isSuccess = true;
-            } catch (Exception exception) {
+            } catch (InvalidOperationException exception) {
+                //  Do nothing
+            } catch (HttpRequestException exception) {
+                //  Do nothing
+            } catch (TaskCanceledException exception) {
+                //  Do nothing
+            } catch (UriFormatException exception) {
+                //  Do nothing
+            }
+            if (!isSuccess) {
                 try {   //  Try download file via fallback URL
                     httpResponseMessage = await httpClient.GetAsync(tableRow[fallbackUrlIndex].ToString());
                     contentTypeIndexInAllowedTypes = allowedTypes.IndexOf(httpResponseMessage.Content.Headers.ContentType.ToString());
                     isSuccess = true;
-                } catch (Exception exception2) {
-                    //  Regardless of error, probably continue
+                } catch (InvalidOperationException exception) {
+                    //  Do nothing
+                } catch (HttpRequestException exception) {
+                    //  Do nothing
+                } catch (TaskCanceledException exception) {
+                    //  Do nothing
+                } catch (UriFormatException exception) {
+                    //  Do nothing
                 }
             }
 

@@ -105,11 +105,13 @@ namespace Week_4_PDF_downloader {   //  Version 2.0
         }
 
         /// <summary>
-        /// 
+        /// Write a table to file in location as set by object instance's property. 
+        /// File named as current time. 
+        /// File will be structured as CSV separated by a set character. New line is made for each row.
         /// </summary>
-        /// <param name="dataTable"></param>
-        /// <param name="indicesOfColumnsToWrite"></param>
-        /// <param name="separatorCharacter"></param>
+        /// <param name="dataTable">DataTable object from which the CSV file will be made.</param>
+        /// <param name="indicesOfColumnsToWrite">Indices of which columns from the table are to be written to file.</param>
+        /// <param name="separatorCharacter">Character used as separator in CSV file. Typically semicolon (;).</param>
         public void writeToCsvFileWithHeaders(DataTable dataTable, List<int> indicesOfColumnsToWrite, char separatorCharacter) {
             indicesOfColumnsToWrite.Order();
             String fileName = Regex.Replace(DateTime.Now.ToLocalTime().ToString(), "[:]", "-") + ".txt";   //  Name file current time. Replace colons with hyphen.
