@@ -114,7 +114,7 @@ namespace Week_4_PDF_downloader {   //  Version 2.0
         /// <param name="separatorCharacter">Character used as separator in CSV file. Typically semicolon (;).</param>
         public void writeToCsvFileWithHeaders(DataTable dataTable, List<int> indicesOfColumnsToWrite, char separatorCharacter) {
             indicesOfColumnsToWrite.Order();
-            String fileName = Regex.Replace(DateTime.Now.ToLocalTime().ToString(), "[:]", "-") + ".txt";   //  Name file current time. Replace colons with hyphen.
+            String fileName = Regex.Replace(DateTime.Now.ToLocalTime().ToString(), "[:]", "-") + ".csv";   //  Name file current time. Replace colons with hyphen.
             StreamWriter streamWriter = new StreamWriter(folderLocation + '/' + fileName);
 
             String line = "";

@@ -78,6 +78,8 @@ namespace Week_4_PDF_downloader {
                 //  Do nothing
             } catch (UriFormatException exception) {
                 //  Do nothing
+            } catch (NotSupportedException exception) {
+                //  Do nothing
             }
             if (!isSuccess) {
                 try {   //  Try download file via fallback URL
@@ -91,6 +93,8 @@ namespace Week_4_PDF_downloader {
                 } catch (TaskCanceledException exception) {
                     //  Do nothing
                 } catch (UriFormatException exception) {
+                    //  Do nothing
+                } catch (NotSupportedException exception) {
                     //  Do nothing
                 }
             }
