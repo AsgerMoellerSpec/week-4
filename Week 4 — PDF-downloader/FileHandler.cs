@@ -5,7 +5,7 @@ using ClosedXML.Excel;
 namespace Week_4_PDF_downloader {   //  Version 2.0
     public class FileHandler {
         //  Constants
-        private static String DEFAULT_FOLDER_LOCATION = "../../../../Excel files";
+        private static String DEFAULT_FOLDER_LOCATION = "../../../..";
 
         //  Fields
         private String[] files;

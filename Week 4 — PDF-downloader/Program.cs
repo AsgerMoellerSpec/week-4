@@ -32,7 +32,7 @@ namespace Week_4_PDF_downloader
 
                 Console.WriteLine("".PadRight(8) + (httpResponseMessage != null ? httpResponseMessage.StatusCode : "NULL"));
 
-                if (i >= 32) {   //  Limit to TEN (10) during on-site test
+                if (i >= 8) {   //  Limit to TEN (10) during on-site test
                     break;
                 }
                 i++;

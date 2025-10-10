@@ -65,7 +65,9 @@ namespace Week_4_PDF_downloader {
             Boolean isSuccess = false;
             int contentTypeIndexInAllowedTypes = -1;
 
-            //  Regardless of error type, assume failure and continue
+            //  Regardless of error type, assume failure and continue.
+            //  Last catch of any "Exception" done because error occurred that I didn't have time to
+            //  look into. Somehow httpResponseMessage can remain null after GetAsync()?
             try {   //  Try download file
                 httpResponseMessage = await httpClient.GetAsync(tableRow[urlIndex].ToString());
                 contentTypeIndexInAllowedTypes = allowedTypes.IndexOf(httpResponseMessage.Content.Headers.ContentType.ToString());
@@ -80,6 +82,8 @@ namespace Week_4_PDF_downloader {
                 //  Do nothing
             } catch (NotSupportedException exception) {
                 //  Do nothing
+            } catch (Exception exception) {
+                //  Do nothing.
             }
             if (!isSuccess) {
                 try {   //  Try download file via fallback URL
@@ -96,15 +100,23 @@ namespace Week_4_PDF_downloader {
                     //  Do nothing
                 } catch (NotSupportedException exception) {
                     //  Do nothing
+                } catch (Exception exception) {
+                    //  Do nothing.
                 }
             }
 
             //  Save to folder
             if (isSuccess && contentTypeIndexInAllowedTypes != -1) {
-                    //  Save to folder
-                    Stream contentStream = await httpResponseMessage.Content.ReadAsStreamAsync();
-                    FileStream fileStream = new FileStream(downloadLocation + '/' + tableRow[fileNameIndex] + ".pdf", FileMode.Create, FileAccess.Write, FileShare.None);   //  Might download other types. Make data-driven.
+                //  Save to folder
+                Stream contentStream;
+                FileStream fileStream;
+                try {
+                    contentStream = await httpResponseMessage.Content.ReadAsStreamAsync();
+                    fileStream = new FileStream(downloadLocation + '/' + tableRow[fileNameIndex] + ".pdf", FileMode.Create, FileAccess.Write, FileShare.None);   //  Might download other types. Make data-driven.
                     await contentStream.CopyToAsync(fileStream);
+                } catch (Exception exception) {
+                    isSuccess = false;
+                }
             } else {
                 isSuccess = false;
             }
