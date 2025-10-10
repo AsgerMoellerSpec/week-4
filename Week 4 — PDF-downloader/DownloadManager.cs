@@ -11,7 +11,7 @@ namespace Week_4_PDF_downloader {
         private DataTable statusTable = new DataTable();
 
         //  Properties
-        public List<String> allowedTypes = new List<String> { "application/pdf" };
+        public List<String> AllowedTypes = new List<String> { "application/pdf" };  //  To improve, should be a Map (or Dictionary, whatever C# calls it)
 
         /// <summary>
         /// Create a new object instance targeting default folder, to which downloaded files will be saved.
