@@ -20,13 +20,13 @@ README.
 UML diagram.
 	¯\_(ツ)_/¯
 
+
+
 Presentation: 
 - What is the assignment. 
 - My approach; no way I'm making UI. 
-  - Re-use file handler from last week's assignment. Problems with converting to reading .xlsx file type. OleDb. 
-- Structure. Error handling. 
+  - Re-use file handler from last week's assignment. Problems with converting to reading .xlsx file type. Looked into OleDb, ended up with ClosedXML. 
+- Structure. Error handling. Object-oriented programming; I rely heavily on DataTable objects. 
 - Package used. ClosedXML because the alternative requires a license for commercial use (which the course is not, but the assignment alleges to be). 
 
 
-Where to pick up wednesday: 
-Make new DownloadManager class!
