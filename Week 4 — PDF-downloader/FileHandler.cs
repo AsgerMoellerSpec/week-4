@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using ClosedXML.Excel;
 
 namespace Week_4_PDF_downloader {   //  Version 2.0
-    public class FileHandler {
+    public class FileHandler : IFileHandler {
         //  Constants
         private static String DEFAULT_FOLDER_LOCATION = "../../../..";
 

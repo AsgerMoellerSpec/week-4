@@ -1,7 +1,7 @@
 ﻿using System.Data;
 
 namespace Week_4_PDF_downloader {
-    internal class DownloadManager {
+    internal class DownloadManager : IDownloadManager {
         //  Constants
         private static String DEFAULT_DOWNLOAD_LOCATION = "../../../../Downloads";
 
