@@ -4,23 +4,28 @@ namespace Week_4_PDF_downloader
 {
     internal class Program
     {
-        static async Task Main(string[] args) {
+        static async Task Main(string[] args)
+        {
+            FileHandler excelFileHandler = new FileHandler("../../../../Excel files");
+            DownloadManager downloadManager = new DownloadManager();
+            FileHandler logFileHandler = new FileHandler("../../../../Logs");
+            await HandleReports(excelFileHandler, downloadManager, logFileHandler);
+        }
+
+        static async Task HandleReports(IFileHandler excelFileHandler, IDownloadManager downloadManager, IFileHandler logFileHandler) {
             Console.WriteLine("PDF Download Application");
             Console.WriteLine("Status: Reading Excel file");
 
             //  Read excel file
-            FileHandler excelFileHandler = new FileHandler("../../../../Excel files");
             try {
                 excelFileHandler.readTableFromExcelFileWithHeaders(0);
             } catch (IndexOutOfRangeException exception) {
-                Console.WriteLine("Status: No Excel file found in folder " + Path.GetFullPath(excelFileHandler.folderLocation));
+                Console.WriteLine("Status: No Excel file found in folder " + Path.GetFullPath(excelFileHandler.getFolderLocation()));
             }
 
 
             Console.WriteLine("Status: Excel file finished reading");
             Console.WriteLine("Status: Attempting download");
-
-            DownloadManager downloadManager = new DownloadManager();
 
             //  Download files
             int i = 0;
@@ -41,7 +46,6 @@ namespace Week_4_PDF_downloader
 
             Console.WriteLine("Status: Writing log");
 
-            FileHandler logFileHandler = new FileHandler("../../../../Logs");
             logFileHandler.writeToCsvFileWithHeaders(downloadManager.getStatusList(), new List<int> { 0, 1 }, ';');
 
             Console.WriteLine("Status: Log written");
