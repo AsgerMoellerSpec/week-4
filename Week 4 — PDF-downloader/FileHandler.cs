@@ -33,8 +33,14 @@ namespace Week_4_PDF_downloader {   //  Version 2.0
         /// Get table of items read from CSV file.
         /// </summary>
         /// <returns>Collection of string arrays. Should be parsed before pushing to database.</returns>
-        public DataTable getTable() { 
+        public DataTable getTable()
+        {
             return dataTable;
+        }
+        
+        public string getFolderLocation()
+        {
+            return folderLocation;
         }
 
         /// <summary>
