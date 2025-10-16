@@ -1,21 +1,30 @@
+using System.Data;
+
 public class MockFileHandler : Week_4_PDF_downloader.IFileHandler
 {
-    DataTable getTable()
+    private bool throwsIndexOutOfRangeException;
+
+    public MockFileHandler(bool returnsIndexOutOfRangeException = false)
+    {
+        this.throwsIndexOutOfRangeException = throwsIndexOutOfRangeException;
+    }
+
+    public DataTable getTable()
     {
         return null;
     }
 
-    string getFolderLocation()
+    public string getFolderLocation()
     {
         return "";
     }
 
-    void readTableFromExcelFileWithHeaders(int discoveredFileIndex)
+    public void readTableFromExcelFileWithHeaders(int discoveredFileIndex)
     {
-        return;
+        if (throwsIndexOutOfRangeException) throw new IndexOutOfRangeException();
     }
 
-    void writeToCsvFileWithHeaders(DataTable dataTable, List<int> indicesOfColumnsToWrite, char separatorCharacter)
+    public void writeToCsvFileWithHeaders(DataTable dataTable, List<int> indicesOfColumnsToWrite, char separatorCharacter)
     {
         return;
     }

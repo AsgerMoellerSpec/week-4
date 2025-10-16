@@ -1,12 +1,19 @@
+using System.Data;
+
 public class MockDownloadManager : Week_4_PDF_downloader.IDownloadManager
 {
-    DataTable getStatusList()
+    public MockDownloadManager()
+    {
+        return;
+    }
+
+    public DataTable getStatusList()
     {
         return null;
     }
     
-    Task<HttpResponseMessage> tryDownloadAsync(DataRow tableRow, int fileNameIndex, int urlIndex, int fallbackUrlIndex)
+    public Task<HttpResponseMessage> tryDownloadAsync(DataRow tableRow, int fileNameIndex, int urlIndex, int fallbackUrlIndex)
     {
-        return;
+        return null;
     }
 }
