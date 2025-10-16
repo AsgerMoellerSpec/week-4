@@ -1,10 +1,16 @@
 namespace tests;
 
-public class UnitTest1
+public class ProgramTest
 {
     [Fact]
-    public void Test1()
+    public void TestHandlesIndexOutOfRangeException()
+
     {
-        
+        MockFileHandler excelFileHandler = new(true);
+        MockDownloadManager downloadManager = new();
+        MockFileHandler logFileManager = new();
+
+        Week_4_PDF_downloader.Program.HandleReports(excelFileHandler, downloadManager, logFileManager);
     }
+
 }
