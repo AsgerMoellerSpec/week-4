@@ -27,9 +27,22 @@ public class ProgramTest
 
         Week_4_PDF_downloader.Program.HandleReports(excelFileHandler, downloadManager, logFileManager);
         int numberOfDownloads = downloadManager.getNumberOfDownloads();
-        Assert.Equal(numberOfDownloads, numberOfRows);
-        DataRow latestRow = downloadManager.getLatestRow();
+        Assert.Equal(numberOfRows, numberOfDownloads);
         DataRow mockRow = excelFileHandler.getTable().Rows[0];
-        Assert.Same(latestRow, mockRow);
+        DataRow latestRow = downloadManager.getLatestRow();
+        Assert.Same(mockRow, latestRow);
+    }
+
+    [Fact]
+    public void TestMultipleReportsAreDownloaded()
+    {
+        int numberOfRows = 3;
+        MockFileHandler excelFileHandler = new(numberOfRows: numberOfRows);
+        MockDownloadManager downloadManager = new();
+        MockFileHandler logFileManager = new();
+
+        Week_4_PDF_downloader.Program.HandleReports(excelFileHandler, downloadManager, logFileManager);
+        int numberOfDownloads = downloadManager.getNumberOfDownloads();
+        Assert.Equal(numberOfRows, numberOfDownloads);
     }
 }
