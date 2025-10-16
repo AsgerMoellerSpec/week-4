@@ -47,7 +47,7 @@ public class ProgramTest
         int numberOfDownloads = downloadManager.getNumberOfDownloads();
         Assert.Equal(numberOfRows, numberOfDownloads);
     }
-    
+
     [Fact]
     public void TestMakesCorrectLogRequest()
 
@@ -69,4 +69,15 @@ public class ProgramTest
         Assert.Equal(expectedIndicesWritten, latestIndicesWritten);
         Assert.Equal(expectedSeparatorWritten, latestSeparatorWritten);
     }
+    
+    /*[Fact]
+    public void TestHandles()
+
+    {
+        MockFileHandler excelFileHandler = new(throwsIndexOutOfRangeException: true);
+        MockDownloadManager downloadManager = new();
+        MockFileHandler logFileManager = new();
+
+        Week_4_PDF_downloader.Program.HandleReports(excelFileHandler, downloadManager, logFileManager);
+    }*/
 }
