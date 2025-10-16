@@ -2,9 +2,9 @@
 
 namespace Week_4_PDF_downloader
 {
-    internal class Program
+    public class Program
     {
-        static async Task Main(string[] args)
+        internal static async Task Main(string[] args)
         {
             FileHandler excelFileHandler = new FileHandler("../../../../Excel files");
             DownloadManager downloadManager = new DownloadManager();
@@ -12,7 +12,7 @@ namespace Week_4_PDF_downloader
             await HandleReports(excelFileHandler, downloadManager, logFileHandler);
         }
 
-        static async Task HandleReports(IFileHandler excelFileHandler, IDownloadManager downloadManager, IFileHandler logFileHandler) {
+        public static async Task HandleReports(IFileHandler excelFileHandler, IDownloadManager downloadManager, IFileHandler logFileHandler) {
             Console.WriteLine("PDF Download Application");
             Console.WriteLine("Status: Reading Excel file");
 

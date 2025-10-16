@@ -1,7 +1,10 @@
 using System.Data;
 
-interface IDownloadManager
+namespace Week_4_PDF_downloader
 {
-    DataTable getStatusList();
-    Task<HttpResponseMessage> tryDownloadAsync(DataRow tableRow, int fileNameIndex, int urlIndex, int fallbackUrlIndex);
+    public interface IDownloadManager
+    {
+        DataTable getStatusList();
+        Task<HttpResponseMessage> tryDownloadAsync(DataRow tableRow, int fileNameIndex, int urlIndex, int fallbackUrlIndex);
+    }
 }
