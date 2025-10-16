@@ -4,14 +4,16 @@ public class MockDownloadManager : Week_4_PDF_downloader.IDownloadManager
 {
     private int numberOfDownloads = 0;
     private DataRow latestRow;
-    public MockDownloadManager()
+    private DataTable statusList;
+    public MockDownloadManager(DataTable statusList = null)
     {
+        this.statusList = statusList;
         return;
     }
 
     public DataTable getStatusList()
     {
-        return null;
+        return statusList;
     }
 
     public async Task<HttpResponseMessage> tryDownloadAsync(DataRow tableRow, int fileNameIndex, int urlIndex, int fallbackUrlIndex)

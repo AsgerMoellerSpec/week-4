@@ -26,6 +26,7 @@ public class ProgramTest
         MockFileHandler logFileManager = new();
 
         Week_4_PDF_downloader.Program.HandleReports(excelFileHandler, downloadManager, logFileManager);
+
         int numberOfDownloads = downloadManager.getNumberOfDownloads();
         Assert.Equal(numberOfRows, numberOfDownloads);
         DataRow mockRow = excelFileHandler.getTable().Rows[0];
@@ -42,7 +43,30 @@ public class ProgramTest
         MockFileHandler logFileManager = new();
 
         Week_4_PDF_downloader.Program.HandleReports(excelFileHandler, downloadManager, logFileManager);
+
         int numberOfDownloads = downloadManager.getNumberOfDownloads();
         Assert.Equal(numberOfRows, numberOfDownloads);
+    }
+    
+    [Fact]
+    public void TestMakesCorrectLogRequest()
+
+    {
+        MockFileHandler excelFileHandler = new();
+        DataTable mockStatusTable = new();
+        MockDownloadManager downloadManager = new(statusList: mockStatusTable);
+        MockFileHandler logFileManager = new();
+
+        Week_4_PDF_downloader.Program.HandleReports(excelFileHandler, downloadManager, logFileManager);
+
+        List<int> expectedIndicesWritten = new List<int> { 0, 1 };
+        char expectedSeparatorWritten = ';';
+        DataTable latestTableWritten = logFileManager.getLatestTableWritten();
+        List<int> latestIndicesWritten = logFileManager.getLatestIndicesWritten();
+        char latestSeparatorWritten = logFileManager.getLatestSeparatorWritten();
+
+        Assert.Same(mockStatusTable, latestTableWritten);
+        Assert.Equal(expectedIndicesWritten, latestIndicesWritten);
+        Assert.Equal(expectedSeparatorWritten, latestSeparatorWritten);
     }
 }

@@ -4,6 +4,9 @@ public class MockFileHandler : Week_4_PDF_downloader.IFileHandler
 {
     private DataTable table;
     private bool throwsIndexOutOfRangeException;
+    private DataTable latestTableWritten;
+    private List<int> latestIndicesWritten;
+    private char latestSeparatorWritten;
 
     public MockFileHandler(int numberOfRows = 0, int numberOfColumns = 39, bool throwsIndexOutOfRangeException = false)
     {
@@ -18,7 +21,22 @@ public class MockFileHandler : Week_4_PDF_downloader.IFileHandler
 
     public string getFolderLocation()
     {
-        return "";
+        return "mock folder location";
+    }
+
+    public DataTable getLatestTableWritten()
+    {
+        return latestTableWritten;
+    }
+
+    public List<int> getLatestIndicesWritten()
+    {
+        return latestIndicesWritten;
+    }
+
+    public char getLatestSeparatorWritten()
+    {
+        return latestSeparatorWritten;
     }
 
     public void readTableFromExcelFileWithHeaders(int discoveredFileIndex)
@@ -28,7 +46,9 @@ public class MockFileHandler : Week_4_PDF_downloader.IFileHandler
 
     public void writeToCsvFileWithHeaders(DataTable dataTable, List<int> indicesOfColumnsToWrite, char separatorCharacter)
     {
-        return;
+        latestTableWritten = dataTable;
+        latestIndicesWritten = indicesOfColumnsToWrite;
+        latestSeparatorWritten = separatorCharacter;
     }
 
     private DataTable createMockTable(int numberOfRows, int numberOfColumns)
