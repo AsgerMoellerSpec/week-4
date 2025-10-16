@@ -1,0 +1,25 @@
+Test results:
+
+ProgramTest.cs
+    TestHandlesIndexOutOfRangeException:
+        Tests whether the program handles potential IndexOutOfRangeExceptions thrown by FileHandler when reading Excel sheet.
+        Test passed
+    TestReportIsDownloaded:
+        Tests whether the program attempts to download from rows that are read from Excel sheet.
+        Test passed
+    TestMultipleReportsAreDownloaded:
+        Tests whether the program attempts to download the amount of reports listed in Excel sheet.
+        Test passed
+    TestMakesCorrectLogRequest:
+        Tests whether the program sends the correct information when calling its logFileHandler to write download log.
+        Test passed
+
+Classes and methods are intuitively organized, and naming is consistent and descriptive (except: is there a meaningful difference between a handler and a manager?).
+Documentation overall is good, but class descriptions would be welcome for understanding the class' responsibilities.
+Certain methods are long and could gain from being refactored into more, smaller methods.
+High coupling between classes, including classes imported from packages - this meant the code required refactoring to be easily unit tested.
+Many problems are ignored and operations skipped, which matches the program's specifications.
+However, certain potential exceptions regarding misformatted input are not taken into account.
+
+Did not perform unit testing on FileHandler and DownloadManager.
+Did not perform integration testing.
