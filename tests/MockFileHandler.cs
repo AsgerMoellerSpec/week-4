@@ -33,7 +33,7 @@ public class MockFileHandler : Week_4_PDF_downloader.IFileHandler
 
     private DataTable createMockTable(int numberOfRows, int numberOfColumns)
     {
-        DataTable mockTable = new DataTable();
+        DataTable mockTable = new();
         for (int i = 0; i < numberOfColumns; i++)
         {
             mockTable.Columns.Add(i.ToString(), typeof(string));
